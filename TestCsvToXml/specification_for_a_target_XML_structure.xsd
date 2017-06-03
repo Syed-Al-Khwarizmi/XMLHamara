@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Response">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ResponseProperties"/>
+        <xs:element ref="Lists"/>
+      </xs:sequence>
+      <xs:attribute name="Source" type="xs:string" use="required"/>
+      <xs:attribute name="CountryReferences" type="CountryRef" use="required"/>
+      <xs:attribute name="TimeStart" type="xs:dateTime" use="required"/>
+      <xs:attribute name="TimeAnswer" type="xs:dateTime" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ResponseProperties">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element  name="Property" type="ElementProperty" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Lists">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Countries" maxOccurs="1"/>
+        <xs:element ref="Entities" maxOccurs="1"/>
+        <xs:element ref="Vessels" maxOccurs="1"/>
+        <xs:element ref="Individuals" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Countries">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Country" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Country">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Reference" minOccurs="1" maxOccurs="1" type="xs:string"/>
+        <xs:element name="Listed" minOccurs="0" maxOccurs="1" type="xs:date"/>
+        <xs:element name="Delisted" minOccurs="0" maxOccurs="1" type="xs:date"/>
+        <xs:element ref="ReasonDisclosures" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name ="ReasonDisclosures">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="ReasonDisclosure"  maxOccurs="unbounded" type="ElementProperty"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Entities">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element  ref="Entity" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Entity">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="EntityReference" minOccurs="1" maxOccurs="1"/>
+        <xs:element ref="EntityRegistrations" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="EntityAddresses" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="EntityOtherDetails"  minOccurs="0" maxOccurs="1" />
+        <xs:element name="Listed" minOccurs="0" maxOccurs="1" type="xs:date"/>
+        <xs:element name="Delisted" minOccurs="0" maxOccurs="1" type="xs:date"/>
+        <xs:element ref="ReasonDisclosures" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EntityReference">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="EntityName" minOccurs="1" maxOccurs="1" type="xs:string"/>
+        <xs:element ref="EntitySynonyms" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="EntityAbbreviations" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EntitySynonyms">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Synonym" maxOccurs="unbounded" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EntityAbbreviations">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Abbreviation" maxOccurs="unbounded" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EntityRegistrations">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="EntityRegistration" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EntityRegistration">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Country" minOccurs="1" maxOccurs="1" type="xs:string"/>
+        <xs:element name="Date" minOccurs="0" maxOccurs="1" type="xs:date"/>
+        <xs:element name="Number" minOccurs="0" maxOccurs="1" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EntityAddresses">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="EntityAddress" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EntityAddress">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Country" minOccurs="1" maxOccurs="1" type="xs:string"/>
+        <xs:element name="ZIPCode" minOccurs="0" maxOccurs="1" type="xs:string"/>
+        <xs:element name="StateProvince" minOccurs="0" maxOccurs="1" type="xs:string"/>
+        <xs:element name="City" minOccurs="0" maxOccurs="1" type="xs:string"/>
+        <xs:element name="Street" minOccurs="0" maxOccurs="1" type="xs:string"/>
+        <xs:element name="Building" minOccurs="0" maxOccurs="1" type="xs:string"/>
+        <xs:element ref="AddressOtherDetails"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AddressOtherDetails">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Detail" type="ElementProperty" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EntityOtherDetails">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Detail" type="ElementProperty" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Vessels">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Vessel" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Vessel">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Name" minOccurs="1" maxOccurs="1" type="xs:string"/>
+        <xs:element ref="VesselRegistrations" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="VesselIdentifiers" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="VesselOtherDetails" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="Listed" minOccurs="0" maxOccurs="1" type="xs:date"/>
+        <xs:element name="Delisted" minOccurs="0" maxOccurs="1" type="xs:date"/>
+        <xs:element ref="ReasonDisclosures" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="VesselRegistrations">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="VesselRegistration" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="VesselRegistration">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Country" minOccurs="1" maxOccurs="1" type="xs:string"/>
+        <xs:element name="Number" minOccurs="0" maxOccurs="1" type="xs:string"/>
+        <xs:element name="Date" minOccurs="0" maxOccurs="1" type="xs:date"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="VesselIdentifiers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="VesselIdentifier" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="VesselIdentifier">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Kind" minOccurs="1" maxOccurs="1" type="VesselIdetifierKind"/>
+        <xs:element name="Value" minOccurs="1" maxOccurs="1" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="VesselOtherDetails">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="VesselOtherDetail" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="VesselOtherDetail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Detail"  maxOccurs="unbounded" type="ElementProperty"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Individuals">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element  ref="Individual" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Individual">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="IndividualReference" minOccurs="1" maxOccurs="1"/>
+        <xs:element ref="DateBirth" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="Nationality" minOccurs="0" maxOccurs="1" type="xs:string"/>
+        <xs:element ref="IndividualDocuments" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="IndividualOtherDetails" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="Listed" minOccurs="0" maxOccurs="1" type="xs:date"/>
+        <xs:element name="Delisted" minOccurs="0" maxOccurs="1" type="xs:date"/>
+        <xs:element ref="ReasonDisclosures" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IndividualReference">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="PersonName" minOccurs="1" maxOccurs="1"/>
+        <xs:element ref="PersonAKAs" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DateBirth">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Kind" minOccurs="1" maxOccurs="1" type="DateKind"/>
+        <xs:element name="DateValue" minOccurs="1" maxOccurs="1" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PersonName">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="FirstName" minOccurs="0" maxOccurs="1" type="xs:string"/>
+        <xs:element name="LastName" minOccurs="0" maxOccurs="1" type="xs:string"/>
+        <xs:element ref="OtherNameParts"/>
+        <xs:element ref="OtherNameDetails"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OtherNameParts">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="NamePart" type="ElementProperty" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OtherNameDetails">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="OtherNameDetail" type="ElementProperty" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PersonAKAs">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="PersonName" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IndividualOtherDetails">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="IndividualOtherDetail" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IndividualOtherDetail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Detail"  maxOccurs="unbounded" type="ElementProperty"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IndividualDocuments">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="PersonDocument" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PersonDocument">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Country" minOccurs="1" maxOccurs="1" type="xs:string"/>
+        <xs:element name="Number" minOccurs="0" maxOccurs="1" type="xs:string"/>
+        <xs:element name="DateIssue" minOccurs="0" maxOccurs="1" type="xs:date"/>
+        <xs:element ref="PersonDocumentOtherDetails"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PersonDocumentOtherDetails">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="PersonDocumentOtherDetail" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PersonDocumentOtherDetail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Detail"  maxOccurs="unbounded" type="ElementProperty"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="CountryRef">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ISO 3166-1 3 Letter Code"/>
+      <xs:enumeration value="ISO 3166-1 2 Letter Code"/>
+      <xs:enumeration value="ISO 3166-1 Number"/>
+      <xs:enumeration value="ISO 3166-1 Common Name"/>
+      <xs:enumeration value="ISO 3166-1 Formal Name"/>
+      <xs:enumeration value="Free Country Name"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DateKind">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="EXACT"/>
+      <xs:enumeration value="RANGE"/>
+      <xs:enumeration value="PART"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="VesselIdetifierKind">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="MMSI"/>
+      <xs:enumeration value="IMO"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="ElementProperty">
+    <xs:sequence>
+      <xs:element name="Name" minOccurs="1" maxOccurs="1" type="xs:string"/>
+      <xs:element name="Value" minOccurs="0" maxOccurs="1"  type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+
