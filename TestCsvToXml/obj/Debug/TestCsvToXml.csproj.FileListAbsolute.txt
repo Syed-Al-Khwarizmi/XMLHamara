@@ -1,8 +1,6 @@
 C:\Users\Ali_H\Desktop\TestCsvToXml\bin\Debug\csvexample.csv
 C:\Users\Ali_H\Desktop\TestCsvToXml\bin\Debug\TestCsvToXml.exe
 C:\Users\Ali_H\Desktop\TestCsvToXml\bin\Debug\TestCsvToXml.pdb
-C:\Users\Ali_H\Desktop\TestCsvToXml\bin\Debug\CsvToXml.dll
-C:\Users\Ali_H\Desktop\TestCsvToXml\bin\Debug\CsvToXml.pdb
 C:\Users\Ali_H\Desktop\TestCsvToXml\obj\Debug\TestCsvToXml.csprojResolveAssemblyReference.cache
 C:\Users\Ali_H\Desktop\TestCsvToXml\obj\Debug\TestCsvToXml.exe
 C:\Users\Ali_H\Desktop\TestCsvToXml\obj\Debug\TestCsvToXml.pdb
