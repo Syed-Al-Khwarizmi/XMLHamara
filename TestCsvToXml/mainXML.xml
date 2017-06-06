@@ -10,7 +10,7 @@
       <Country>
         <Reference>string</Reference>
       </Country>
-    </Countries>
+    </Countries>  
     <Entities>
       <Entity>
         <EntityReference>

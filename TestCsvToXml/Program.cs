@@ -22,7 +22,7 @@
 ////            //split the rows
 
 ////            //Create the declaration
-////            var xsurvey = new XDocument(
+////            var doc = new XDocument(
 ////                new XDeclaration("1.0", "UTF-8", "yes"));
 ////            var lists = new XElement("Lists"); //Create the root
 ////            for (int i = 2; i < source.Length; i++)
@@ -30,8 +30,8 @@
 ////                var fields = source[i].Split(',');
 ////                    lists.Add(individualRowCreator(fields));
 ////            }
-////            xsurvey.Add(lists);
-////            return xsurvey;
+////            doc.Add(lists);
+////            return doc;
 ////        }
 
 
@@ -182,9 +182,9 @@
 ////            //split the rows
 
 ////            //Create the declaration
-////            var xsurvey = new XDocument(
+////            var doc = new XDocument(
 ////                new XDeclaration("1.0", "UTF-8", "yes"));
-////            var xroot = new XElement("Entities"); //Create the root
+////            var responce = new XElement("Entities"); //Create the root
 ////            for (int i = 1; i < source.Length; i++)
 ////            {
 ////                var fields1 = source[i].Remove(0, 1).Split(',');
@@ -193,10 +193,10 @@
 ////                //var result = Regex.Split(fields[i], "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)");
 
 ////                // tfp.Delimiters = new string[] { "," };
-////                xroot.Add(rowCreator(fields));
+////                responce.Add(rowCreator(fields));
 ////            }
-////            xsurvey.Add(xroot);
-////            return xsurvey;
+////            doc.Add(responce);
+////            return doc;
 ////        }
 
 
@@ -328,9 +328,9 @@
 //            //split the rows
 
 //            //Create the declaration
-//            var xsurvey = new XDocument(
+//            var doc = new XDocument(
 //                new XDeclaration("1.0", "UTF-8", "yes"));
-//            var xroot = new XElement("Lists"); //Create the root
+//            var responce = new XElement("Lists"); //Create the root
 //            var Individuals = new XElement("Individuals");
 //            var Entities = new XElement("Entities");
 //            for (int i = 2; i < source.Length; i++)
@@ -364,10 +364,10 @@
 //                    Entities.Add(entityRowCreator(fields));
 //                }//end if
 //            }
-//            xroot.Add(Individuals);
-//            xroot.Add(Entities);
-//            xsurvey.Add(xroot);
-//            return xsurvey;
+//            responce.Add(Individuals);
+//            responce.Add(Entities);
+//            doc.Add(responce);
+//            return doc;
 //        }
 
 
@@ -530,16 +530,29 @@ namespace TestCsvToXml
         /// Simple test conversion
         /// </summary>
         /// 
-
+        //public static int source.Length = 150; //replacing this over source.Length in the code for the sake of testing the output
 
         public static XDocument ConvertCsvToXML(string[] source)
         {
             //split the rows
 
             //Create the declaration
-            var xsurvey = new XDocument(
+            var doc = new XDocument(
                 new XDeclaration("1.0", "UTF-8", "yes"));
-            var xroot = new XElement("Lists"); //Create the root
+            var responce = new XElement("Responce"); //Create the root
+            var responceProperties = new XElement("ResponceProperties");
+            var property = new XElement("Property");
+
+            string[] properties = source[0].Split(',');
+            var propertyName = new XElement("Name", properties[0]);
+            var propertyValue = new XElement("Value", properties[1]);
+
+            property.Add(propertyName);
+            property.Add(propertyValue);
+            responceProperties.Add(property);
+            responce.Add(responceProperties);
+
+            var Lists = new XElement("Lists");
             var Individuals = new XElement("Individuals");
             var Entities = new XElement("Entities");
             for (int i = 2; i < source.Length; i++)
@@ -550,30 +563,41 @@ namespace TestCsvToXml
                 //var result = Regex.Split(fields[i], "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)");
 
                 // tfp.Delimiters = new string[] { "," };
-                if (individualRowCreator(fields, source) != null)
+                if (fields[47] == "Individual")
                 {
-                    Individuals.Add(individualRowCreator(fields, source));
-                }//end if
-                System.Console.WriteLine(Individuals);
+                    if (!individualRowCreator(fields, source).IsEmpty)
+                    {
+                        Individuals.Add(individualRowCreator(fields, source));
+                    }//end if
+                }
+                else if (fields[47] == "Entity")
+                {
+                    if (!entityRowCreator(fields, source).IsEmpty)
+                    {
+                        Entities.Add(entityRowCreator(fields, source));
+                    }//end if
+                }
+                // System.Console.WriteLine(Individuals);
             }
 
-            for (int i = 2; i < source.Length; i++)
-            {
-                var fields1 = source[i].Remove(0, 1).Split(',');
-                var fields = Regex.Split(source[i], "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)");
+            //for (int i = 2; i < source.Length; i++)
+            //{
+            //    var fields1 = source[i].Remove(0, 1).Split(',');
+            //    var fields = Regex.Split(source[i], "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)");
 
-                //var result = Regex.Split(fields[i], "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)");
+            //    //var result = Regex.Split(fields[i], "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)");
 
-                // tfp.Delimiters = new string[] { "," };
-                if (entityRowCreator(fields, source) != null)
-                {
-                    Entities.Add(entityRowCreator(fields, source));
-                }//end if
-            }
-            xroot.Add(Individuals);
-            xroot.Add(Entities);
-            xsurvey.Add(xroot);
-            return xsurvey;
+            //    // tfp.Delimiters = new string[] { "," };
+            //    if (!entityRowCreator(fields, source).IsEmpty)
+            //    {
+            //        Entities.Add(entityRowCreator(fields, source));
+            //    }//end if
+            //}
+            Lists.Add(Individuals);
+            Lists.Add(Entities);
+            responce.Add(Lists);
+            doc.Add(responce);
+            return doc;
         }
 
 
@@ -584,166 +608,315 @@ namespace TestCsvToXml
             {
 
                 //Getting all address
-                List<string> addr = getallAddresses(fields[57], source);
+                //   List<string> addr = getallAddresses(fields[57], source);
                 //Getting all Aka
-                List<string> Aka = getallAKA(fields[57], source);
+                //  List<string> Aka = getallAKA(fields[57], source);
                 //
                 //XElement Individuals = new XElement("Individuals");
-                XElement Individual = new XElement("Individual");
-                XElement IndivRef = new XElement("IndividualReference",
-                                    new XElement("PersonName",
-                                        new XElement("FirstName", fields[1]),
-                                        new XElement("LastName", fields[0]),
-                                        new XElement("OtherNamePart",
-                                            new XElement("namePart", fields[2]),
-                                            new XElement("namePart", fields[3]),
-                                            new XElement("namePart", fields[4]),
-                                            new XElement("namePart", fields[5])
-                                            )
-                                        ),
-                                            new XElement("OtherNameDetails",
-                                                new XElement("OtherNameDetail", fields[6])
-                                                ),
-                                            new XElement("Nationality", fields[43]),
-                                            new XElement("IndividualDocument",
-                                                new XElement("PersonDocument",
-                                                    new XElement("Country", fields[43]),
-                                                    new XElement("Number", 25),
-                                                    new XElement("DateIssue", fields[53])),
-                                                    new XElement("PersonDocumentOtherDetails",
-                                                        new XElement("PersonDocumentOtherDetail",
-                                                            new XElement("Detail", fields[45])))),
-                                            new XElement("IndividualOtherDetails",
-                                                new XElement("IndividualOtherDetail",
-                                                    new XElement("Detail", fields[45]))),
-                                            new XElement("Listed", fields[53]),
-                                            new XElement("Delisted", fields[55]),
-                                            new XElement("ReasonDisclosures",
-                                                new XElement("ReasonDisclosure", fields[51]))
 
-                                    );
-                XElement dob = new XElement("DateBirth",
-                            new XElement("kind", "DD/MM/YYYY"),
-                            new XElement("DateValue", fields[7]));
-                Individual.Add(IndivRef);
-                Individual.Add(dob);
+                //new added 5-june-17 
+                getallAddressAndAka(fields[57], source);
+                List<string> addr = Address;
+                //Getting all Aka
+                List<string> aka = Aka;
+                //
+                XElement Individual = new XElement("Individual");
+
+                //IndividualReference, and childs
+                XElement IndividualReference = new XElement("IndividualReference");
+                XElement PersonName = new XElement("PersonName",
+                                                        new XElement("FirstName", fields[3]),
+                                                        new XElement("LastName", fields[1]));
+                XElement PersonAKAs = new XElement("PersonAKAs");
+                for (int i = 0; i < aka.Count; i++)
+                {
+                    PersonAKAs.Add(new XElement("PersonName",
+                                        new XElement("FirstName", aka[i]),
+                                        new XElement("LastName", aka[i])));
+                }//end for i
+                IndividualReference.Add(PersonName);
+                IndividualReference.Add(PersonAKAs);
+                //other details secion
+                XElement IndividualOtherDetails = new XElement("IndividualOtherDetails");
+                //declaring an int array with oterDetailsIndexes
+                int[] otherDetailsIndexes = { 13, 17, 19, 23, 25, 27, 41, 45, 55, 57 };
+                string[] fieldNames = { "Title", "TownOfBirth", "CountryOfBirth", "PassportDetails", "NINumber", "Position", "PostalZipCode", "OtherInfo", "LastUpdated", "GroupID" };
+                string[] otherDetailsValues = new string[fieldNames.Length];
+
+                for (int x = 0; x < fieldNames.Length; x++)
+                {
+                    otherDetailsValues[x] = fields[otherDetailsIndexes[x]];
+                }//end for x
+                /*
+                 * Title: 13, TownOfBirth: 17, CountryOfBirth: 19, PassportDetails: 23
+                 * NI Number: 25, Position: 27, PostalZipCode: 41, OtherInfo: 45
+                 * LastUpdated: 55, GroupID: 57
+                 */
+                for (int a = 0; a < otherDetailsValues.Length; a++)
+                {
+                    if (otherDetailsValues[a].Length > 1) //please dont hate me for this shit
+                    {
+                        IndividualOtherDetails.Add(new XElement("IndividualOtherDetail",
+                                                        new XElement("Detail",
+                                                            new XElement("Name", fieldNames[a]),
+                                                            new XElement("Value", otherDetailsValues[a]))
+                                                               )
+                                                   );
+                    }//end if
+                }//end for a
+
+                XElement DOB = new XElement("DateBirth");
+                XElement kind = new XElement("Kind", dobKind(fields[15])[0]);
+                XElement date = new XElement("DateValue", dobKind(fields[15])[1]);
+                DOB.Add(kind);
+                DOB.Add(date);
+                IndividualReference.Add(DOB);
+                IndividualReference.Add(IndividualOtherDetails);
+                XElement listed = new XElement("Listed", fields[53]);
+                XElement reasonDisclosures = new XElement("ReasonDisclosures",
+                                                new XElement("ReasonDisclosure",
+                                                    new XElement("Name", "REGIME"),
+                                                    new XElement("Value", fields[51])));
+                //Empty global Address and Aka
+                Address = null;
+                Aka = null;
+
+
+                Individual.Add(IndividualReference);
                 return Individual;
             }
             return null;
         } //end individualRowCreator
 
 
-        //To get all addresses
-        public static List<string> getallAddresses(string gid, string[] source)
+        public static string[] dobKind(string dob) //returns {kind, data}
         {
-            List<string> address = new List<string>();
+            string[] returningDate = new string[2];
+            if (dob == "")
+            {
+                returningDate[0] = "";
+                returningDate[1] = "";
+                return returningDate;
+            }
+            string[] DOB = dob.Split('/'); //--/--/1980 becomes {--, --, 1980}
+            if (DOB[0] == "00")
+            {
+                if (DOB[1] == "00")
+                {
+                    returningDate[0] = "PART";
+                    returningDate[1] = DOB[2];
+                    return returningDate;
+                }//end if
+                else if (DOB[1] != "00")
+                {
+                    returningDate[0] = "PART";
+                    returningDate[1] = DOB[1] + "/" + DOB[2];
+                    return returningDate;
+                }//end else if
+            }//end if
+            else
+            {
+                returningDate[0] = "EXACT";
+                returningDate[1] = DOB[0] + "/" + DOB[1] + "/" + DOB[2];
+                return returningDate;
+            }
+            return null;
+        }//end dobKind
+
+        public static List<string> Address;
+        public static List<string> Aka;
+
+        //To get all addresses
+        //public static List<string> getallAddresses(string gid, string[] source)
+        //{
+        //    List<string> address = new List<string>();
+
+        //    // string[] address = new string[59]; int j = 0;
+        //    for (int i = 1; i < source.Length; i++)
+        //    {
+
+        //        var fields = Regex.Split(source[i], "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)");
+        //        if (fields[49] == "Prime Alias" && fields[57] == gid)
+        //        {
+        //            address.Add(fields[43]);
+        //            address.Add(fields[41]);
+        //            address.Add(fields[39]);
+        //            address.Add(fields[37]);
+        //            address.Add(fields[35]);
+        //            address.Add(fields[33]);
+        //            address.Add(fields[31]);
+        //            address.Add(fields[29]);
+        //        }
+
+
+        //    }
+        //    return address;
+
+        //}
+        //new update 5-june-17 6:45pm
+        public static void getallAddressAndAka(string gid, string[] source)
+        {
+            Address = new List<string>();
+            Aka = new List<string>();
+            int count = -2, count1 = -2;
 
             // string[] address = new string[59]; int j = 0;
             for (int i = 1; i < source.Length; i++)
             {
-
+                if (count == -1 && count1 == -1)
+                {
+                    break;
+                }
                 var fields = Regex.Split(source[i], "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)");
                 if (fields[49] == "Prime Alias" && fields[57] == gid)
                 {
-                    address.Add(fields[43]);
-                    address.Add(fields[41]);
-                    address.Add(fields[39]);
-                    address.Add(fields[37]);
-                    address.Add(fields[35]);
-                    address.Add(fields[33]);
-                    address.Add(fields[31]);
-                    address.Add(fields[29]);
+                    Address.Add(fields[43]);
+                    Address.Add(fields[41]);
+                    Address.Add(fields[39]);
+                    Address.Add(fields[37]);
+                    Address.Add(fields[35]);
+                    Address.Add(fields[33]);
+                    Address.Add(fields[31]);
+                    Address.Add(fields[29]);
+                    if (count == -2)
+                        count = 0;
+                    count++;
+                }
+                else if (fields[49] == "AKA" && fields[57] == gid)
+                {
+                    if (fields[47] == "Entity")
+                    {
+                        if (!Aka.Contains(fields[1]))
+                            Aka.Add(fields[1]);
+                    }
+                    else if (fields[47] == "Individual")
+                    {
+                        if (!Aka.Contains(fields[1]) && !Aka.Contains(fields[0]))
+                        {
+                            //here you will get list which contain lastname0 firstname0 lastname1 firstname1 .....
+
+                            Aka.Add(fields[0]);
+                            Aka.Add(fields[1]);
+                        }
+                    }
+                    if (count1 == -2)
+                        count1 = 0;
+                    count1++;
+                }
+                else
+                {
+                    if (count != -2)
+                        count--;
+                    if (count1 != -2)
+                        count1--;
+
+
                 }
 
             }
-            return address;
 
         }
+
+        //
 
         //To get AKA
-        public static List<string> getallAKA(string gid, string[] source)
-        {
-            List<string> aka = new List<string>();
+        //public static List<string> getallAKA(string gid, string[] source)
+        //{
+        //    List<string> aka = new List<string>();
 
-            // string[] address = new string[59]; int j = 0;
-            for (int i = 1; i < source.Length; i++)
-            {
+        //    // string[] address = new string[59]; int j = 0;
+        //    for (int i = 1; i < source.Length; i++)
+        //    {
 
-                var fields = Regex.Split(source[i], "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)");
-                if (fields[49] == "AKA" && fields[57] == gid)
-                {
-                    if (!aka.Contains(fields[1]))
-                        aka.Add(fields[1]);
+        //        var fields = Regex.Split(source[i], "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)");
+        //        if (fields[49] == "AKA" && fields[57] == gid)
+        //        {
+        //            if (!aka.Contains(fields[1]))
+        //                aka.Add(fields[1]);
 
-                }
+        //        }
 
-            }
-            return aka;
+        //    }
+        //    return aka;
 
-        }
+        //}
         private static XElement entityRowCreator(string[] fields, string[] source)
         {
             XElement Entity = new XElement("Entity");
 
-            if (fields[47] != "Entity")
-            {
-                //this means it's an indivisual 
-                //  continue;
-            }
-            else
+            if (fields[47] == "Entity" && fields[49] == "Prime Alias")
             {
                 //Getting all address
-                List<string> addr = getallAddresses(fields[57], source);
+                //getallAddressAka();
+                getallAddressAndAka(fields[57], source);
+                List<string> addr = Address;
                 //Getting all Aka
-                List<string> Aka = getallAKA(fields[57], source);
+                List<string> aka = Aka;
+
                 //
 
-                XElement EntRef = new XElement("EntityReference",
-                                        new XElement("EntityName", fields[1]),
-                                        new XElement("EntitySynonmys",
-                                           new XElement("Synonmys", "")),//ask client
-                                        new XElement("EntityAbbreviations",
-                                            new XElement("Abbreviations", ""))//ask client
-                                    );
+                XElement EntRef = new XElement("EntityReference");
+                XElement EntName = new XElement("EntityName", fields[1]);
+                XElement EntSynonyms = new XElement("EntitySynonmys");
+                for (int i = 0; i < aka.Count; i++)
+                {
+                    EntSynonyms.Add(new XElement("Synonmys", aka[i]));
+                }
+
+                XElement EntAbbre = new XElement("EntityAbbreviations",
+                                            new XElement("Abbreviations"));//ask client
+
+                EntRef.Add(EntName);
+                EntRef.Add(EntSynonyms);
+                EntRef.Add(EntAbbre);
+
                 XElement EntReg = new XElement("EntityRegistrations",
                                     new XElement("EntityRegistration",
                                         new XElement("Country", fields[43]),
-                                        new XElement("Date", "19/5/1995"),//ask client
-                                        new XElement("Number", "0000"))//ask client
+                                        new XElement("Date"),//ask client
+                                        new XElement("Number"))//ask client
 
                                         );
                 //changes here to enter multiple addresses
 
+                XElement EntAddrs = new XElement("EntityAddresses");
+                XElement EntAddr = new XElement("EntityAddress");
                 for (int i = 0; i < addr.Count; i += 8)
                 {
-                    XElement EntAddr = new XElement("EntityAddresses",
-                                            new XElement("EntityAddress",
-                                                new XElement("Country", addr[0 + i]),
-                                                new XElement("ZipCode", addr[1 + i]),
-                                                new XElement("StateProvince", addr[2 + i]),
-                                                new XElement("City", addr[3 + i]),
-                                                new XElement("Street", addr[4 + i]),
-                                                new XElement("Building", addr[5 + i]),
-                                                new XElement("AddressOtherDetails",
-                                                    new XElement("Detail", addr[6 + i] + addr[7 + i])))
-                                                    );
+
+
+                    EntAddr.Add(new XElement("Country", addr[0 + i]),
+                     new XElement("ZipCode", addr[1 + i]),
+                     new XElement("StateProvince", addr[2 + i]),
+                     new XElement("City", addr[3 + i]),
+                     new XElement("Street", addr[4 + i]),
+                     new XElement("Building", addr[5 + i]),
+                     new XElement("AddressOtherDetails",
+                         new XElement("Detail", addr[6 + i] + addr[7 + i]))
+                         );
                 }
+                EntAddrs.Add(EntAddr);
+
                 XElement Entlist = new XElement("Listed", fields[53]);
 
-                XElement EntDelist = new XElement("DeListed", fields[55]);//ask client
+                XElement EntDelist = new XElement("DeListed");//ask client
 
                 XElement EntResn = new XElement("ReasonDisclousers",
-                                        new XElement("ReasonDisclouser", fields[57])
+                                        new XElement("ReasonDisclouser", fields[51])
                                         );
 
 
 
                 Entity.Add(EntRef);
                 Entity.Add(EntReg);
-                //  Entity.Add(EntAddr);
+                Entity.Add(EntAddrs);
                 Entity.Add(Entlist);
                 Entity.Add(EntDelist);
                 Entity.Add(EntResn);
+                //
+                //After using global Address and Aka
+                Address = null;
+                Aka = null;
             }
             //  }//end for i
             return Entity;
@@ -755,11 +928,16 @@ namespace TestCsvToXml
         private static void Main()
         {
 
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+
             string[] source = File.ReadAllLines("C:\\Users\\Ali_H\\Desktop\\TestCsvToXml\\sanctionsconlist.csv");
 
             XDocument doc = ConvertCsvToXML(source);
             doc.Save("outputxml.xml");
 
+            // the code that you want to measure comes here
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds;
 
         }
     }
