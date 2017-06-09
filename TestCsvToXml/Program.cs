@@ -25,7 +25,7 @@
 ////            var doc = new XDocument(
 ////                new XDeclaration("1.0", "UTF-8", "yes"));
 ////            var lists = new XElement("Lists"); //Create the root
-////            for (int i = 2; i < source.Length; i++)
+////            for (int i = 2; i < 200; i++)
 ////            {
 ////                var fields = source[i].Split(',');
 ////                    lists.Add(individualRowCreator(fields));
@@ -73,8 +73,8 @@
 ////            ////Console.ReadLine();
 
 ////            string[] source = File.ReadAllLines("C:\\Users\\Ali_H\\Desktop\\TestCsvToXml\\sanctionsconlist.csv");
-////            string[][] source2 = new string[source.Length-2][];
-////            for (int i = 2; i < source.Length; i++) {
+////            string[][] source2 = new string[200-2][];
+////            for (int i = 2; i < 200; i++) {
 ////                source2[i-2] = new string[source[i].Length];
 ////                source2[i-2] = source[i].Split(',');
 ////            }
@@ -84,7 +84,7 @@
 
 
 ////            //XElement Individuals = new XElement("Individuals");
-////            //for (int i = 2; i < source.Length; i++) { // i = 2, because discarding the first two rows
+////            //for (int i = 2; i < 200; i++) { // i = 2, because discarding the first two rows
 ////            //    string[] fields = source[i].Split(',');
 ////            //    Individuals.Add(rowCreator(fields));
 ////            //}
@@ -185,7 +185,7 @@
 ////            var doc = new XDocument(
 ////                new XDeclaration("1.0", "UTF-8", "yes"));
 ////            var responce = new XElement("Entities"); //Create the root
-////            for (int i = 1; i < source.Length; i++)
+////            for (int i = 1; i < 200; i++)
 ////            {
 ////                var fields1 = source[i].Remove(0, 1).Split(',');
 ////                var fields = Regex.Split(source[i], "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)");
@@ -291,7 +291,7 @@
 ////            //doc1.Save("output.xml"); 
 ////            ////
 ////            //XElement Individuals = new XElement("Individuals");
-////            //for (int i = 2; i < source.Length; i++) { // i = 2, because discarding the first two rows
+////            //for (int i = 2; i < 200; i++) { // i = 2, because discarding the first two rows
 ////            //    string[] fields = source[i].Split(',');
 ////            //    Individuals.Add(rowCreator(fields));
 ////            //}
@@ -333,7 +333,7 @@
 //            var responce = new XElement("Lists"); //Create the root
 //            var Individuals = new XElement("Individuals");
 //            var Entities = new XElement("Entities");
-//            for (int i = 2; i < source.Length; i++)
+//            for (int i = 2; i < 200; i++)
 //            {
 //                var fields1 = source[i].Remove(0, 1).Split(',');
 //                var fields = Regex.Split(source[i], "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)");
@@ -351,7 +351,7 @@
 //                }//end if
 //            }
 
-//            for (int i = 2; i < source.Length; i++)
+//            for (int i = 2; i < 200; i++)
 //            {
 //                var fields1 = source[i].Remove(0, 1).Split(',');
 //                var fields = Regex.Split(source[i], "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)");
@@ -498,7 +498,7 @@
 //            //doc1.Save("output.xml"); 
 //            ////
 //            //XElement Individuals = new XElement("Individuals");
-//            //for (int i = 2; i < source.Length; i++) { // i = 2, because discarding the first two rows
+//            //for (int i = 2; i < 200; i++) { // i = 2, because discarding the first two rows
 //            //    string[] fields = source[i].Split(',');
 //            //    Individuals.Add(rowCreator(fields));
 //            //}
@@ -530,7 +530,7 @@ namespace TestCsvToXml
         /// Simple test conversion
         /// </summary>
         /// 
-        //public static int source.Length = 150; //replacing this over source.Length in the code for the sake of testing the output
+        //public static int 200 = 150; //replacing this over 200 in the code for the sake of testing the output
 
         public static XDocument ConvertCsvToXML(string[] source)
         {
@@ -540,6 +540,13 @@ namespace TestCsvToXml
             var doc = new XDocument(
                 new XDeclaration("1.0", "UTF-8", "yes"));
             var responce = new XElement("Responce"); //Create the root
+            string[] responceAttributes = { "Source", "CountryReferences", "TimeStart" }; //TimeAnswer will be added later
+            string[] responceAttributesValues = { "HMTreasury", "Free Country Name", (DateTime.Now).ToString() };
+
+            for (int i = 0; i < responceAttributes.Length; i++)
+            {
+                responce.SetAttributeValue(responceAttributes[i], responceAttributesValues[i]);
+            }//end for i
             var responceProperties = new XElement("ResponceProperties");
             var property = new XElement("Property");
 
@@ -555,7 +562,7 @@ namespace TestCsvToXml
             var Lists = new XElement("Lists");
             var Individuals = new XElement("Individuals");
             var Entities = new XElement("Entities");
-            for (int i = 2; i < source.Length; i++)
+            for (int i = 2; i < 200; i++)
             {
                 var fields1 = source[i].Remove(0, 1).Split(',');
                 var fields = Regex.Split(source[i], "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)");
@@ -580,7 +587,7 @@ namespace TestCsvToXml
                 // System.Console.WriteLine(Individuals);
             }
 
-            //for (int i = 2; i < source.Length; i++)
+            //for (int i = 2; i < 200; i++)
             //{
             //    var fields1 = source[i].Remove(0, 1).Split(',');
             //    var fields = Regex.Split(source[i], "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)");
@@ -596,6 +603,7 @@ namespace TestCsvToXml
             Lists.Add(Individuals);
             Lists.Add(Entities);
             responce.Add(Lists);
+            responce.SetAttributeValue("TimeAnswer", (DateTime.Now).ToString());
             doc.Add(responce);
             return doc;
         }
@@ -619,6 +627,13 @@ namespace TestCsvToXml
                 List<string> addr = Address;
                 //Getting all Aka
                 List<string> aka = Aka;
+                ////TESTING CODE STARTS
+                ////CHECKING THE LENGTHS(COUNTS) OF "aka"(WHETHER ALL ARE EVEN, OR NOT)
+                //if (aka.Count % 2 != 0)
+                //{
+                //    System.Console.WriteLine("Odd length aka found on entry number {0}", fields[57]);
+                //}//end if
+                ////TESTING CODE ENDS
                 //
                 XElement Individual = new XElement("Individual");
 
@@ -628,14 +643,20 @@ namespace TestCsvToXml
                                                         new XElement("FirstName", fields[3]),
                                                         new XElement("LastName", fields[1]));
                 XElement PersonAKAs = new XElement("PersonAKAs");
-                for (int i = 0; i < aka.Count; i++)
+                if (aka.Count != 0)
                 {
-                    PersonAKAs.Add(new XElement("PersonName",
-                                        new XElement("FirstName", aka[i]),
-                                        new XElement("LastName", aka[i])));
-                }//end for i
+                    for (int i = 0; i < aka.Count; i+=2)
+                    {
+                        PersonAKAs.Add(new XElement("PersonName",
+                                            new XElement("FirstName", aka[i]),
+                                            new XElement("LastName", aka[i + 1])));
+                    }//end for i
+                }//end if
                 IndividualReference.Add(PersonName);
-                IndividualReference.Add(PersonAKAs);
+                if (aka.Count != 0)
+                {
+                    IndividualReference.Add(PersonAKAs);
+                }//end if
                 //other details secion
                 XElement IndividualOtherDetails = new XElement("IndividualOtherDetails");
                 //declaring an int array with oterDetailsIndexes
@@ -698,7 +719,7 @@ namespace TestCsvToXml
                 returningDate[1] = "";
                 return returningDate;
             }
-            string[] DOB = dob.Split('/'); //--/--/1980 becomes {--, --, 1980}
+            string[] DOB = dob.Split('/'); //00/00/1980 becomes {00, 00, 1980}
             if (DOB[0] == "00")
             {
                 if (DOB[1] == "00")
@@ -732,7 +753,7 @@ namespace TestCsvToXml
         //    List<string> address = new List<string>();
 
         //    // string[] address = new string[59]; int j = 0;
-        //    for (int i = 1; i < source.Length; i++)
+        //    for (int i = 1; i < 200; i++)
         //    {
 
         //        var fields = Regex.Split(source[i], "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)");
@@ -761,7 +782,7 @@ namespace TestCsvToXml
             int count = -2, count1 = -2;
 
             // string[] address = new string[59]; int j = 0;
-            for (int i = 1; i < source.Length; i++)
+            for (int i = 1; i < 200; i++)
             {
                 if (count == -1 && count1 == -1)
                 {
@@ -795,8 +816,8 @@ namespace TestCsvToXml
                         {
                             //here you will get list which contain lastname0 firstname0 lastname1 firstname1 .....
 
-                            Aka.Add(fields[0]);
                             Aka.Add(fields[1]);
+                            Aka.Add(fields[3]);
                         }
                     }
                     if (count1 == -2)
@@ -825,7 +846,7 @@ namespace TestCsvToXml
         //    List<string> aka = new List<string>();
 
         //    // string[] address = new string[59]; int j = 0;
-        //    for (int i = 1; i < source.Length; i++)
+        //    for (int i = 1; i < 200; i++)
         //    {
 
         //        var fields = Regex.Split(source[i], "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)");
@@ -938,6 +959,7 @@ namespace TestCsvToXml
             // the code that you want to measure comes here
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;
+            System.Console.ReadKey();
 
         }
     }
