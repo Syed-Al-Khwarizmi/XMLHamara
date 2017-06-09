@@ -521,6 +521,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
+using System.Globalization;
 
 namespace TestCsvToXml
 {
@@ -539,15 +540,15 @@ namespace TestCsvToXml
             //Create the declaration
             var doc = new XDocument(
                 new XDeclaration("1.0", "UTF-8", "yes"));
-            var responce = new XElement("Responce"); //Create the root
+            var responce = new XElement("Response"); //Create the root
             string[] responceAttributes = { "Source", "CountryReferences", "TimeStart" }; //TimeAnswer will be added later
-            string[] responceAttributesValues = { "HMTreasury", "Free Country Name", (DateTime.Now).ToString() };
+            string[] responceAttributesValues = { "HMTreasury", "Free Country Name", (DateTime.Now).ToString(new CultureInfo("en-GB")) };
 
             for (int i = 0; i < responceAttributes.Length; i++)
             {
                 responce.SetAttributeValue(responceAttributes[i], responceAttributesValues[i]);
             }//end for i
-            var responceProperties = new XElement("ResponceProperties");
+            var responceProperties = new XElement("ResponseProperties");
             var property = new XElement("Property");
 
             string[] properties = source[0].Split(',');
@@ -603,7 +604,7 @@ namespace TestCsvToXml
             Lists.Add(Individuals);
             Lists.Add(Entities);
             responce.Add(Lists);
-            responce.SetAttributeValue("TimeAnswer", (DateTime.Now).ToString());
+            responce.SetAttributeValue("TimeAnswer", (DateTime.Now).ToString(new CultureInfo("en-GB")));
             doc.Add(responce);
             return doc;
         }
