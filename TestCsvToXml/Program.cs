@@ -522,6 +522,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using System.Globalization;
+using System.Text;
 
 namespace TestCsvToXml
 {
@@ -553,7 +554,8 @@ namespace TestCsvToXml
 
             string[] properties = source[0].Split(',');
             var propertyName = new XElement("Name", properties[0]);
-            var propertyValue = new XElement("Value", properties[1]);
+            DateTime lastUpdatedDate = Convert.ToDateTime(properties[1]);
+            var propertyValue = new XElement("Value", ((DateTime)lastUpdatedDate).ToString("dd/MM/yyyy"));
 
             property.Add(propertyName);
             property.Add(propertyValue);
@@ -641,16 +643,16 @@ namespace TestCsvToXml
                 //IndividualReference, and childs
                 XElement IndividualReference = new XElement("IndividualReference");
                 XElement PersonName = new XElement("PersonName",
-                                                        new XElement("FirstName", fields[3]),
-                                                        new XElement("LastName", fields[1]));
+                                                        new XElement("FirstName", fields[3].Trim()),
+                                                        new XElement("LastName", fields[1].Trim()));
                 XElement PersonAKAs = new XElement("PersonAKAs");
                 if (aka.Count != 0)
                 {
                     for (int i = 0; i < aka.Count; i+=2)
                     {
                         PersonAKAs.Add(new XElement("PersonName",
-                                            new XElement("FirstName", aka[i]),
-                                            new XElement("LastName", aka[i + 1])));
+                                            new XElement("FirstName", aka[i].Trim()),
+                                            new XElement("LastName", aka[i + 1].Trim())));
                     }//end for i
                 }//end if
                 IndividualReference.Add(PersonName);
@@ -658,13 +660,25 @@ namespace TestCsvToXml
                 {
                     IndividualReference.Add(PersonAKAs);
                 }//end if
+                 //documents section
+                XElement IndividualDocuments = new XElement("IndividualDocuments");
+                if (fields[23].Length > 0)
+                {
+                    XElement PersonDocument = new XElement("PersonDocument");
+                    XElement PersonDucomentOtherDetails = new XElement("PersonDocumentOtherDetails");
+                    XElement PersonDocumentOtherDetail = new XElement("PersonDocumentOtherDetail",
+                                                            new XElement("Name", "Passport"),
+                                                            new XElement("Detail", fields[23]));
+                    PersonDucomentOtherDetails.Add(PersonDocumentOtherDetail);
+                    PersonDocument.Add(PersonDucomentOtherDetails);
+                    IndividualDocuments.Add(PersonDocument);
+                }//end if
                 //other details secion
                 XElement IndividualOtherDetails = new XElement("IndividualOtherDetails");
                 //declaring an int array with oterDetailsIndexes
-                int[] otherDetailsIndexes = { 13, 17, 19, 23, 25, 27, 41, 45, 55, 57 };
-                string[] fieldNames = { "Title", "TownOfBirth", "CountryOfBirth", "PassportDetails", "NINumber", "Position", "PostalZipCode", "OtherInfo", "LastUpdated", "GroupID" };
+                int[] otherDetailsIndexes = { 13, 17, 19, 25, 27, 41, 45, 55, 57 };
+                string[] fieldNames = { "Title", "TownOfBirth", "CountryOfBirth", "NINumber", "Position", "PostalZipCode", "OtherInfo", "LastUpdated", "GroupID" };
                 string[] otherDetailsValues = new string[fieldNames.Length];
-
                 for (int x = 0; x < fieldNames.Length; x++)
                 {
                     otherDetailsValues[x] = fields[otherDetailsIndexes[x]];
@@ -678,12 +692,33 @@ namespace TestCsvToXml
                 {
                     if (otherDetailsValues[a].Length > 1) //please dont hate me for this shit
                     {
-                        IndividualOtherDetails.Add(new XElement("IndividualOtherDetail",
+                        if (fieldNames[a] == "CountryOfBirth")
+                        {
+                            IndividualOtherDetails.Add(new XElement("IndividualOtherDetail",
                                                         new XElement("Detail",
                                                             new XElement("Name", fieldNames[a]),
-                                                            new XElement("Value", otherDetailsValues[a]))
+                                                            new XElement("Value", RemoveSpecialCharacters(otherDetailsValues[a]).Trim()))
                                                                )
                                                    );
+                        }//end inner if
+                        else if (fieldNames[a] == "LastUpdated")
+                        {
+                            IndividualOtherDetails.Add(new XElement("IndividualOtherDetail",
+                                                        new XElement("Detail",
+                                                            new XElement("Name", fieldNames[a]),
+                                                            new XElement("Value", reformatDate(otherDetailsValues[a])))
+                                                               )
+                                                   );
+                        }//end inner elseif
+                        else
+                        {
+                            IndividualOtherDetails.Add(new XElement("IndividualOtherDetail",
+                                                            new XElement("Detail",
+                                                                new XElement("Name", fieldNames[a]),
+                                                                new XElement("Value", otherDetailsValues[a]))
+                                                                   )
+                                                       );
+                        }//end inner else
                     }//end if
                 }//end for a
 
@@ -705,10 +740,40 @@ namespace TestCsvToXml
 
 
                 Individual.Add(IndividualReference);
+                if (fields[23].Length > 0)
+                    Individual.Add(IndividualDocuments);
                 return Individual;
             }
             return null;
         } //end individualRowCreator
+
+        public static string reformatDate(string date)
+        {
+            //the incoming date is of the format dd/MM/yyyy (can also be d/M/yyyy)
+            string[] dateChunks = date.Split('/');
+            if (dateChunks[0].Length == 1)
+            {
+                dateChunks[0] = "0" + dateChunks[0];
+            }//end if
+            if (dateChunks[1].Length == 1)
+            {
+                dateChunks[1] = "0" + dateChunks[1];
+            }//end if
+            return dateChunks[0] + "/" + dateChunks[1] + "/" + dateChunks[2];
+        }//end reformatDate
+
+        public static string RemoveSpecialCharacters(string str)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (char c in str)
+            {
+                if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '_' || c == ' ')
+                {
+                    sb.Append(c);
+                }
+            }
+            return sb.ToString();
+        }
 
 
         public static string[] dobKind(string dob) //returns {kind, data}
@@ -785,6 +850,7 @@ namespace TestCsvToXml
             // string[] address = new string[59]; int j = 0;
             for (int i = 1; i < 200; i++)
             {
+                string street = "", buldg = "", province = "", other = "", city = "";
                 if (count == -1 && count1 == -1)
                 {
                     break;
@@ -792,14 +858,64 @@ namespace TestCsvToXml
                 var fields = Regex.Split(source[i], "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)");
                 if (fields[49] == "Prime Alias" && fields[57] == gid)
                 {
+                    //country
                     Address.Add(fields[43]);
+                    //ZipCode
                     Address.Add(fields[41]);
-                    Address.Add(fields[39]);
-                    Address.Add(fields[37]);
-                    Address.Add(fields[35]);
-                    Address.Add(fields[33]);
-                    Address.Add(fields[31]);
-                    Address.Add(fields[29]);
+                    //state province field[39]
+                    if (fields[39].Contains("PO Box")) { other += fields[39]; }
+                    else if (fields[39].Contains("Street"))
+                    { street += fields[39]; }
+                    else if (fields[39].Contains("Building") || fields[39].Contains("Bldg"))
+                    { buldg += fields[39]; }
+                    else { province += fields[39]; }
+                    //City field[37]
+                    if (fields[37].Contains("PO Box")) { other += fields[37]; }
+                    else if (fields[37].Contains("Street"))
+                    { street += fields[37]; }
+                    else if (fields[37].Contains("Building") || fields[37].Contains("Bldg"))
+                    { buldg += fields[37]; }
+                    else { city += fields[37]; }
+
+                    //For field[29]
+                    if (fields[29].Contains("Street"))
+                    { street += fields[29]; }
+                    else if (fields[29].Contains("Building") || fields[29].Contains("Bldg"))
+                    { buldg += fields[29]; }
+                    else if (fields[29].Contains("Province"))
+                    { province += fields[29]; }
+                    else { other += fields[29]; }
+                    //For field[31]
+                    if (fields[31].Contains("Street"))
+                    { street += fields[31]; }
+                    else if (fields[31].Contains("Building") || fields[31].Contains("Bldg"))
+                    { buldg += fields[31]; }
+                    else if (fields[31].Contains("Province"))
+                    { province += fields[31]; }
+                    else { other += fields[31]; }
+                    //For field[33]
+                    if (fields[33].Contains("Street"))
+                    { street += fields[33]; }
+                    else if (fields[33].Contains("Building") || fields[33].Contains("Bldg"))
+                    { buldg += fields[33]; }
+                    else if (fields[33].Contains("Province"))
+                    { province += fields[33]; }
+                    else { other += fields[33]; }
+                    //for field [35]
+                    if (fields[35].Contains("Street"))
+                    { street += fields[35]; }
+                    else if (fields[35].Contains("Building") || fields[35].Contains("Bldg"))
+                    { buldg += fields[35]; }
+                    else if (fields[35].Contains("Province"))
+                    { province += fields[35]; }
+                    else { other += fields[35]; }
+                    //
+                    Address.Add(province);
+                    Address.Add(city);
+                    Address.Add(street);
+                    Address.Add(buldg);
+                    Address.Add(other);
+                    Address.Add("");
                     if (count == -2)
                         count = 0;
                     count++;
@@ -882,59 +998,114 @@ namespace TestCsvToXml
                 XElement EntSynonyms = new XElement("EntitySynonmys");
                 for (int i = 0; i < aka.Count; i++)
                 {
-                    EntSynonyms.Add(new XElement("Synonmys", aka[i]));
+                    EntSynonyms.Add(new XElement("Synonmys", aka[i].Trim('"')));
                 }
-
-                XElement EntAbbre = new XElement("EntityAbbreviations",
-                                            new XElement("Abbreviations"));//ask client
+                //Not required for this document 
+                //XElement EntAbbre = new XElement("EntityAbbreviations",
+                //                            new XElement("Abbreviations"));//ask client
 
                 EntRef.Add(EntName);
                 EntRef.Add(EntSynonyms);
-                EntRef.Add(EntAbbre);
+                //    EntRef.Add(EntAbbre);
+                //adding in Entity
+                Entity.Add(EntRef);
+                ///
 
-                XElement EntReg = new XElement("EntityRegistrations",
-                                    new XElement("EntityRegistration",
-                                        new XElement("Country", fields[43]),
-                                        new XElement("Date"),//ask client
-                                        new XElement("Number"))//ask client
+                if (fields[43].Length != 0)
+                {
+                    XElement EntReg = new XElement("EntityRegistrations",
+                                        new XElement("EntityRegistration",
+                                            new XElement("Country", fields[43]))
+                                            //new XElement("Date"),//ask client
+                                            //new XElement("Number"))//ask client
 
-                                        );
+                                            );
+                    //adding in Entity
+                    Entity.Add(EntReg);
+                    //
+                }
+
                 //changes here to enter multiple addresses
 
-                XElement EntAddrs = new XElement("EntityAddresses");
-                XElement EntAddr = new XElement("EntityAddress");
-                for (int i = 0; i < addr.Count; i += 8)
+                if (addr.Count > 0)
                 {
+                    XElement EntAddrs = new XElement("EntityAddresses");
+                    XElement EntAddr = new XElement("EntityAddress");
+
+                    for (int i = 0; i < addr.Count; i += 8)
+                    {
+                        //Ali don't hate me plz
+                        if (addr[0 + i].Length != 0)
+                        {
+                            XElement Entcon = new XElement("Country", addr[0 + i]);
+                            EntAddr.Add(Entcon);
+                        }
+                        if (addr[1 + i].Length != 0)
+                        {
+                            XElement Entzip = new XElement("ZipCode", addr[1 + i]);
+                            EntAddr.Add(Entzip);
+                        }
+                        if (addr[2 + i].Length != 0)
+                        {
+                            XElement Entstat = new XElement("StateProvince", addr[2 + i]);
+                            EntAddr.Add(Entstat);
+                        }
+                        if (addr[3 + i].Length != 0)
+                        {
+                            XElement Entcity = new XElement("City", addr[3 + i]);
+                            EntAddr.Add(Entcity);
+                        }
+                        if (addr[4 + i].Length != 0)
+                        {
+                            XElement Entstret = new XElement("Street", addr[4 + i]);
+                            EntAddr.Add(Entstret);
+                        }
+                        if (addr[5 + i].Length != 0)
+                        {
+
+                            XElement Entbui = new XElement("Building", addr[5 + i]);
+                            EntAddr.Add(Entbui);
+                        }
+                        if (addr[6 + i].Length != 0 || addr[7 + i].Length != 0)
+                        {
+                            XElement Entother = new XElement("AddressOtherDetails",
+                                 new XElement("Detail",
+                                     new XElement("Name", "Address"),
+                                new XElement("Value", addr[6 + i] + addr[7 + i])));
+                            EntAddr.Add(Entother);
+                        }
 
 
-                    EntAddr.Add(new XElement("Country", addr[0 + i]),
-                     new XElement("ZipCode", addr[1 + i]),
-                     new XElement("StateProvince", addr[2 + i]),
-                     new XElement("City", addr[3 + i]),
-                     new XElement("Street", addr[4 + i]),
-                     new XElement("Building", addr[5 + i]),
-                     new XElement("AddressOtherDetails",
-                         new XElement("Detail", addr[6 + i] + addr[7 + i]))
-                         );
+                    }
+                    EntAddrs.Add(EntAddr);
+
+                    //adding in the entity list
+                    Entity.Add(EntAddrs);
+                    //
                 }
-                EntAddrs.Add(EntAddr);
 
-                XElement Entlist = new XElement("Listed", fields[53]);
+                if (fields[53].Length != 0)
+                {
+                    XElement Entlist = new XElement("Listed", fields[53]);
+                    Entity.Add(Entlist);
+                }
+                //XElement EntDelist = new XElement("DeListed");//ask client
+                if (fields[51].Length != 0)
+                {
+                    XElement EntResn = new XElement("ReasonDisclosures",
+                                            new XElement("ReasonDisclosure",
+                                                new XElement("Name", "Regime"),
+                                                new XElement("Value", fields[51]))
+                                            );
+                    Entity.Add(EntResn);
 
-                XElement EntDelist = new XElement("DeListed");//ask client
-
-                XElement EntResn = new XElement("ReasonDisclousers",
-                                        new XElement("ReasonDisclouser", fields[51])
-                                        );
+                }
 
 
 
-                Entity.Add(EntRef);
-                Entity.Add(EntReg);
-                Entity.Add(EntAddrs);
-                Entity.Add(Entlist);
-                Entity.Add(EntDelist);
-                Entity.Add(EntResn);
+
+                //  Entity.Add(EntDelist);
+
                 //
                 //After using global Address and Aka
                 Address = null;
