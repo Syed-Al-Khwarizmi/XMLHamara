@@ -61,14 +61,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Driver.cs" />
+    <Compile Include="File11CsvtoXml.cs" />
+    <Compile Include="File1XmltoXml.cs" />
+    <Compile Include="File3XmltoXml.cs" />
+    <Compile Include="File5XmltoXml.cs" />
+    <Compile Include="File6XmltoXml.cs" />
+    <Compile Include="File7CsvtoXml.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XMLManipulation.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="csvexample.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="sanctionsconlist.csv" />
     <None Include="specification_for_a_target_XML_structure.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -81,9 +84,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bundPaar.xml" />
-    <Content Include="bundPaar2.xml" />
-    <Content Include="outputxml.xml" />
+    <Content Include="XMLManipulation.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

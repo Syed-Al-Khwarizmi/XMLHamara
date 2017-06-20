@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Response>
+  <ResponseProperties>
+    <Property>
+      <Name>total</Name>
+      <Value>8661</Value>
+    </Property>
+    <Property>
+      <Name>offset</Name>
+      <Value>0</Value>
+    </Property>
+    <Property>
+      <Name>sources_used</Name>
+      <Value>[
+							{
+							"source:": "Specially Designated Nationals (SDN) - Treasury Department",
+							"source_last_updated:": "19/06/2017 06:33:52",
+							"last_imported:": "19/06/2017 06:33:52",
+							"import_rate:": "Hourly"
+							},
+							{
+							"source:": "Entity List (EL) - Bureau of Industry and Security",
+							"source_last_updated:": "19/06/2017 06:33:52",
+							"last_imported:": "19/06/2017 06:33:52",
+							"import_rate:": "Hourly"
+							},
+							{
+							"source:": "Nonproliferation Sanctions (ISN) - State Department",
+							"source_last_updated:": "19/06/2017 06:33:52",
+							"last_imported:": "19/06/2017 06:33:52",
+							"import_rate:": "Hourly"
+							},
+							{
+							"source:": "Sectoral Sanctions Identifications List (SSI) - Treasury Department",
+							"source_last_updated:": "19/06/2017 06:33:52",
+							"last_imported:": "19/06/2017 06:33:52",
+							"import_rate:": "Hourly"
+							},
+							{
+							"source:": "ITAR Debarred (DTC) - State Department",
+							"source_last_updated:": "19/06/2017 06:33:52",
+							"last_imported:": "19/06/2017 06:33:52",
+							"import_rate:": "Hourly"
+							},
+							{
+							"source:": "Denied Persons List (DPL) - Bureau of Industry and Security",
+							"source_last_updated:": "19/06/2017 06:33:52",
+							"last_imported:": "19/06/2017 06:33:52",
+							"import_rate:": "Hourly"
+							},
+							{
+							"source:": "Non-SDN Iranian Sanctions Act List (NS-ISA) - Treasury Department",
+							"source_last_updated:": "19/06/2017 06:33:52",
+							"last_imported:": "19/06/2017 06:33:52",
+							"import_rate:": "Hourly"
+							},
+							{
+							"source:": "Palestinian Legislative Council List (PLC) - Treasury Department",
+							"source_last_updated:": "19/06/2017 06:33:52",
+							"last_imported:": "19/06/2017 06:33:52",
+							"import_rate:": "Hourly"
+							},
+							{
+							"source:": "Unverified List (UVL) - Bureau of Industry and Security",
+							"source_last_updated:": "19/06/2017 06:33:52",
+							"last_imported:": "19/06/2017 06:33:52",
+							"import_rate:": "Hourly"
+							},
+							{
+							"source:": "Part 561 List (561) - Treasury Department",
+							"source_last_updated:": "19/06/2017 06:33:52",
+							"last_imported:": "19/06/2017 06:33:52",
+							"import_rate:": "Hourly"
+							},
+							{
+							"source:": "Foreign Sanctions Evaders (FSE) - Treasury Department",
+							"source_last_updated:": "19/06/2017 06:33:52",
+							"last_imported:": "19/06/2017 06:33:52",
+							"import_rate:": "Hourly"
+							},
+							{
+							"source:": "",
+							"source_last_updated:": "19/06/2017 06:33:52",
+							"last_imported:": "19/06/2017 06:33:52",
+							"import_rate:": "Hourly"
+							},
+							{
+							"source:": "Sharjah",
+							"source_last_updated:": "19/06/2017 06:33:52",
+							"last_imported:": "19/06/2017 06:33:52",
+							"import_rate:": "Hourly"
+							},
+							{
+							"source:": "Building",
+							"source_last_updated:": "19/06/2017 06:33:52",
+							"last_imported:": "19/06/2017 06:33:52",
+							"import_rate:": "Hourly"
+							},
+							{
+							"source:": "Tortola",
+							"source_last_updated:": "19/06/2017 06:33:52",
+							"last_imported:": "19/06/2017 06:33:52",
+							"import_rate:": "Hourly"
+							}
+							]</Value>
+    </Property>
+    <Property>
+      <Name>research_performed_at</Name>
+      <Value>19/06/2017 06:33:52</Value>
+    </Property>
+  </ResponseProperties>
+  <Lists>
+    <Individuals />
+    <Entities />
+    <Vessels />
+  </Lists>
+</Response>

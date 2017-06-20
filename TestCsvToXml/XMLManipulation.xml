@@ -1,0 +1,39 @@
+﻿<!--<?xml version="1.0" encoding="utf-8" ?>
+<person>
+  <students>
+    <student>
+      <name>Uzair</name>
+      <roll>13F8022</roll>
+      <description>Cheesa BC</description>
+      <CGPA>3.4</CGPA>
+    </student>
+    <student>
+      <name>Ali</name>
+      <roll>13L5490</roll>
+      <description>A strong 3 out of 10</description>
+      <CGPA>2.1</CGPA>
+    </student>
+  </students>
+  <teachers>
+    <teacher>
+      <name>Shakeel</name>
+      <courses>
+        <course>Advanced Programming</course>
+        <course>Software Engineering</course>
+      </courses>
+      <salary>100000</salary>
+      <title>N/A</title>
+    </teacher>
+    <teacher>
+      <name>Adnan Waheed</name>
+      <courses>
+        <course>Intro to Computing</course>
+        <course>Computer Programming</course>
+        <course>Data Structures</course>
+        <course>Operating Systems</course>
+      </courses>
+      <salary>75000</salary>
+      <title>Fake HoD</title>
+    </teacher>
+  </teachers>
+</person>-->
