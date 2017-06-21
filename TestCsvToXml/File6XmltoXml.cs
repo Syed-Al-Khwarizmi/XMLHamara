@@ -943,7 +943,7 @@ namespace File6Namespace
             doc.Add(responce);
             return doc;
         }
-        public static void File6(string filename)
+        public static void File6(string filename, string datetime)
         {
 
             /*

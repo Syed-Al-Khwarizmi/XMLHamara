@@ -527,7 +527,7 @@ namespace File1Namespace
             doc.Add(responce);
             return doc;
         }
-        public static void File1(string filename)
+        public static void File1(string filename, string datetime)
         {
             /*
              * All the below lines are to be enclosed in an action function

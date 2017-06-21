@@ -604,7 +604,7 @@ namespace File7Namespace
         //
 
         ////
-        public static void File7(string filename)
+        public static void File7(string filename, string datetime)
         {
 
             /*
@@ -624,7 +624,7 @@ namespace File7Namespace
             // the code that you want to measure comes here
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;
-            System.Console.ReadKey();
+            //System.Console.ReadKey();
 
         }
     }

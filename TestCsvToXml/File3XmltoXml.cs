@@ -749,7 +749,7 @@ namespace File3Namespace
             doc.Add(responce);
             return doc;
         }
-        public static void File3(string filename)
+        public static void File3(string filename, string datetime)
         {
             /*
              * All the below lines are to be enclosed in an action function
