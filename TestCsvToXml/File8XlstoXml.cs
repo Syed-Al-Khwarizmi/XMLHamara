@@ -19,7 +19,17 @@ namespace akExcelAsZipDemo
 
             foreach (worksheet ws in worksheets)
             {
-                Console.WriteLine($"cols={ws.NumberOfColumns} rows={ws.Rows.Length}");
+                foreach (var row in ws.Rows)
+                {
+                    foreach (var cell in row.Cells)
+                    {
+                        if (cell != null)
+                        {
+                            Console.Write(cell.Text + "\t");
+                        }
+                    }
+                    Console.WriteLine("");
+                }
             }
 
             Console.WriteLine();
