@@ -749,7 +749,7 @@ namespace File3Namespace
             doc.Add(responce);
             return doc;
         }
-        public static void File3(string filename, string datetime)
+        public static void File3(string filename, string output, string datetime)
         {
             /*
              * All the below lines are to be enclosed in an action function
@@ -763,7 +763,7 @@ namespace File3Namespace
 
             //
             XDocument doc = ConvertXMLToXML(rdr);
-            doc.Save("outputFile3xml.xml");
+            doc.Save(output);
             //
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;

@@ -11,4 +11,7 @@
     <FallbackCulture>en-US</FallbackCulture>
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <StartArguments>https://www.pmddtc.state.gov/compliance/documents/debar.csv C:\Users\Ali_H\Music\File.csv C:\Users\Ali_H\Music\File.xml 2/2/2017</StartArguments>
+  </PropertyGroup>
 </Project>

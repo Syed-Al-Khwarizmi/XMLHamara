@@ -943,7 +943,7 @@ namespace File6Namespace
             doc.Add(responce);
             return doc;
         }
-        public static void File6(string filename, string datetime)
+        public static void File6(string filename, string output, string datetime)
         {
 
             /*
@@ -957,7 +957,7 @@ namespace File6Namespace
             var watch = System.Diagnostics.Stopwatch.StartNew();
             XmlReader rdr = XmlReader.Create(filename);
             XDocument doc = ConvertXMLToXML(rdr);
-            doc.Save("outputFile6xml.xml");
+            doc.Save(output);
             //
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;

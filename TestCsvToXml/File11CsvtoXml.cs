@@ -496,7 +496,7 @@ namespace File11Namespace
         //
 
         //
-        public static void File11(string filename, string datetime)
+        public static void File11(string filename, string output, string datetime)
         {
             /*
              * All the below lines are to be enclosed in an action function
@@ -510,7 +510,7 @@ namespace File11Namespace
             string[] source = File.ReadAllLines(filename);
 
             XDocument doc = ConvertCsvToXML(source);
-            doc.Save("File11output.xml");
+            doc.Save(output);
 
             // the code that you want to measure comes here
             watch.Stop();

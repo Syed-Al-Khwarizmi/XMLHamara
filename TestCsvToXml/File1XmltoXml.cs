@@ -527,7 +527,7 @@ namespace File1Namespace
             doc.Add(responce);
             return doc;
         }
-        public static void File1(string filename, string datetime)
+        public static void File1(string filename, string output, string datetime)
         {
             /*
              * All the below lines are to be enclosed in an action function
@@ -539,7 +539,7 @@ namespace File1Namespace
             XmlReader rdr = XmlReader.Create(filename);
 
             XDocument doc = ConvertXMLToXML(rdr);
-            doc.Save("outputFile1xml.xml");
+            doc.Save(output);
             //
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;

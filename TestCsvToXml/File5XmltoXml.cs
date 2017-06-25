@@ -940,7 +940,7 @@ namespace File5Namespace
             doc.Add(responce);
             return doc;
         }
-        public static void File5(string filename, string datetime)
+        public static void File5(string filename, string output, string datetime)
         {
 
             /*
@@ -953,7 +953,7 @@ namespace File5Namespace
             var watch = System.Diagnostics.Stopwatch.StartNew();
             XmlReader rdr = XmlReader.Create(filename);
             XDocument doc = ConvertXMLToXML(rdr);
-            doc.Save("outputFile5xml.xml");
+            doc.Save(output);
             //
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;

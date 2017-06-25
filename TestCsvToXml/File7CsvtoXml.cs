@@ -604,7 +604,7 @@ namespace File7Namespace
         //
 
         ////
-        public static void File7(string filename, string datetime)
+        public static void File7(string filename, string output, string datetime)
         {
 
             /*
@@ -619,7 +619,7 @@ namespace File7Namespace
             string[] source = File.ReadAllLines(filename);
 
             XDocument doc = ConvertCsvToXML(source);
-            doc.Save("outputxml.xml");
+            doc.Save(output);
 
             // the code that you want to measure comes here
             watch.Stop();
